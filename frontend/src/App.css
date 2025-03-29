@@ -1,0 +1,12 @@
+.bg-light-blue {
+  background-color: #e3f2fd; 
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.list-group-item {
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
