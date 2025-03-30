@@ -61,6 +61,7 @@ function App() {
             .catch((error) => console.error("Error adding task:", error));
     };
 
+    
     // Delete a task
     const deleteTask = (id) => {
         axios.delete(`http://localhost:5000/tasks/${id}`)
