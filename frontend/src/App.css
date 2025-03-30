@@ -1,5 +1,5 @@
 .bg-light-blue {
-  background-color: #e3f2fd; 
+  background-color: #e3f2fd;
 }
 
 .card {
@@ -9,4 +9,29 @@
 .list-group-item {
   border-radius: 8px;
   margin-bottom: 5px;
+  transition: all 0.2s ease;
+}
+
+/* Priority styling */
+.priority-high {
+  border-left: 5px solid #dc3545 !important;
+}
+
+.priority-medium {
+  border-left: 5px solid #ffc107 !important;
+}
+
+.priority-low {
+  border-left: 5px solid #28a745 !important;
+}
+
+/* Hover effect */
+.list-group-item:hover {
+  transform: translateX(5px);
+}
+
+/* Badge styling */
+.badge {
+  font-weight: 500;
+  font-size: 0.75rem;
 }
