@@ -13,7 +13,13 @@ function App() {
 
     // Load tasks from backend
     useEffect(() => {
-
+        axios.get("http://localhost:5000/tasks")
+            .then((response) => {
+                const sortedTasks = sortTasksByPriority(response.data);
+                setTasks(sortedTasks);
+                setFilteredTasks(sortedTasks); // Initialize filtered tasks
+            })
+            .catch((error) => console.error("Error fetching tasks:", error));
     }, []);
 
     // Sort tasks by priority (high > medium > low)
@@ -45,7 +51,31 @@ function App() {
             priority: priority 
         };
 
+        axios.post("http://localhost:5000/tasks", newTask)
+            .then(() => {
+                const updatedTasks = [...tasks, newTask];
+                const sortedTasks = sortTasksByPriority(updatedTasks);
+                setTasks(sortedTasks);
+                setTask("");
+            })
+            .catch((error) => console.error("Error adding task:", error));
+    };
 
+    // Delete a task
+    const deleteTask = (id) => {
+        axios.delete(`http://localhost:5000/tasks/${id}`)
+            .then(() => {
+                const updatedTasks = tasks.filter(task => task.id !== id);
+                setTasks(updatedTasks);
+                setFilteredTasks(updatedTasks);
+            })
+            .catch((error) => console.error("Error deleting task:", error));
+    };
+
+    // Clear search field
+    const clearSearch = () => {
+        setSearchTerm("");
+        setFilteredTasks(tasks);
     };
 
     // Get priority color class
@@ -103,7 +133,12 @@ function App() {
                         <button className="btn btn-outline-primary">
                             Search
                         </button>
-
+                        <button 
+                            className="btn btn-outline-danger"
+                            onClick={clearSearch}
+                        >
+                            Clear
+                        </button>
                     </div>
 
                     {/* Task input */}
@@ -138,14 +173,24 @@ function App() {
                         {filteredTasks.map((t) => (
                             <li 
                                 key={t.id} 
-
+                                className={`list-group-item d-flex justify-content-between align-items-center ${getPriorityColorClass(t.priority)}`}
+                            >
+                                <span>{t.text}</span>
+                                <div>
+                                    {t.priority && (
+                                        <span className={`badge me-2 ${
                                             t.priority === "high" ? "bg-danger" : 
                                             t.priority === "medium" ? "bg-warning" : "bg-success"
                                         }`}>
                                             {t.priority}
                                         </span>
                                     )}
-
+                                    <button 
+                                        className="btn btn-sm btn-danger"
+                                        onClick={() => deleteTask(t.id)}
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </li>
                         ))}
