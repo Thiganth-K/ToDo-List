@@ -13,11 +13,7 @@ function App() {
 
     // Load tasks from backend
     useEffect(() => {
-        axios.get("http://localhost:5000/tasks").then((response) => {
-            const sortedTasks = sortTasksByPriority(response.data);
-            setTasks(sortedTasks);
-            setFilteredTasks(sortedTasks); // Initialize filtered tasks
-        });
+
     }, []);
 
     // Sort tasks by priority (high > medium > low)
@@ -49,12 +45,7 @@ function App() {
             priority: priority 
         };
 
-        axios.post("http://localhost:5000/tasks", newTask).then(() => {
-            const updatedTasks = [...tasks, newTask];
-            const sortedTasks = sortTasksByPriority(updatedTasks);
-            setTasks(sortedTasks);
-            setTask("");
-        });
+
     };
 
     // Get priority color class
@@ -112,6 +103,7 @@ function App() {
                         <button className="btn btn-outline-primary">
                             Search
                         </button>
+
                     </div>
 
                     {/* Task input */}
@@ -146,18 +138,14 @@ function App() {
                         {filteredTasks.map((t) => (
                             <li 
                                 key={t.id} 
-                                className={`list-group-item ${getPriorityColorClass(t.priority)}`}
-                            >
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <span>{t.text}</span>
-                                    {t.priority && (
-                                        <span className={`badge ${
+
                                             t.priority === "high" ? "bg-danger" : 
                                             t.priority === "medium" ? "bg-warning" : "bg-success"
                                         }`}>
                                             {t.priority}
                                         </span>
                                     )}
+
                                 </div>
                             </li>
                         ))}
