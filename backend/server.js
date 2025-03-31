@@ -34,38 +34,55 @@ app.post("/tasks", (req, res) => {
     });
 });
 
-app.put("/tasks/:id", (req, res) => {
-    const taskId = req.params.id;
-    const { text, priority } = req.body;
-
-    if (!text || !priority || !['high', 'medium', 'low'].includes(priority)) {
-        return res.status(400).json({ error: "Invalid task data" });
-    }
+app.delete("/tasks/:id", (req, res) => {
+    const taskId = parseInt(req.params.id);
 
     fs.readFile(TASKS_FILE, (err, data) => {
-        if (err) {
-            console.error("Error reading tasks file:", err);
-            return res.status(500).json({ error: "Error reading file" });
-        }
+        if (err) return res.status(500).json({ error: "Error reading file" });
 
         let tasks = JSON.parse(data);
-        const taskIndex = tasks.findIndex((task) => task.id === taskId);
+        const index = tasks.findIndex(task => task.id === taskId);
+
+        if (index === -1) {
+            return res.status(404).json({ error: "Task not found" });
+        }
+
+        tasks.splice(index, 1);
+
+        fs.writeFile(TASKS_FILE, JSON.stringify(tasks, null, 2), (err) => {
+            if (err) return res.status(500).json({ error: "Error writing file" });
+
+            res.status(200).json({ message: "Task deleted" });
+        });
+    });
+});
+
+
+app.put("/tasks/:id", (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const { text, priority } = req.body;
+
+    fs.readFile(TASKS_FILE, (err, data) => {
+        if (err) return res.status(500).json({ error: "Error reading file" });
+
+        let tasks = JSON.parse(data);
+        const taskIndex = tasks.findIndex(task => task.id === taskId);
 
         if (taskIndex === -1) {
             return res.status(404).json({ error: "Task not found" });
         }
 
-        // Update the task
-        tasks[taskIndex] = { ...tasks[taskIndex], text, priority };
+        // Update task
+        tasks[taskIndex] = { ...tasks[taskIndex], text, priority: priority || tasks[taskIndex].priority };
 
+        // Save the updated tasks
         fs.writeFile(TASKS_FILE, JSON.stringify(tasks, null, 2), (err) => {
-            if (err) {
-                console.error("Error writing tasks file:", err);
-                return res.status(500).json({ error: "Error writing file" });
-            }
-            res.json({ message: "Task updated" });
+            if (err) return res.status(500).json({ error: "Error writing file" });
+
+            res.json(tasks[taskIndex]);
         });
     });
 });
+
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
