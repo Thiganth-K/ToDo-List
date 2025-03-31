@@ -33,6 +33,27 @@ app.post("/tasks", (req, res) => {
         });
     });
 });
+//task delete pannum paguthi
+app.delete("/tasks/:id", (req, res) => {
+    const taskId = parseInt(req.params.id);
+
+    fs.readFile(TASKS_FILE, (err, data) => {
+        if (err) return res.status(500).json({ error: "Error reading file" });
+
+        let tasks = JSON.parse(data);
+        const updatedTasks = tasks.filter(task => task.id !== taskId);
+
+        // Check if the task exists
+        if (tasks.length === updatedTasks.length) {
+            return res.status(404).json({ error: "Task not found" });
+        }
+
+        fs.writeFile(TASKS_FILE, JSON.stringify(updatedTasks, null, 2), (err) => {
+            if (err) return res.status(500).json({ error: "Error writing file" });
+            res.json({ message: "Task deleted successfully" });
+        });
+    });
+});
 
 app.delete("/tasks/:id", (req, res) => {
     const taskId = parseInt(req.params.id);

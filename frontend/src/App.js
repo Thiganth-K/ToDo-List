@@ -15,11 +15,13 @@ function App() {
 
     useEffect(() => {
         axios.get("http://localhost:5000/tasks")
+            
             .then((response) => {
-                const sortedTasks = sortTasksByPriority(response.data);
-                setTasks(sortedTasks);
-                setFilteredTasks(sortedTasks);
+                    const sortedTasks = sortTasksByPriority(response.data);
+                    setTasks(sortedTasks);
+                    setFilteredTasks(sortedTasks);
             })
+                .catch((error) => console.error("Error fetching tasks:", error))
             .catch((error) => console.error("Error fetching tasks:", error));
     }, []);
 
@@ -100,7 +102,6 @@ function App() {
         setSearchTerm("");
         setFilteredTasks(tasks);
     };
-
     const getPriorityColorClass = (priority) => {
         return priority === "high" ? "priority-high"
             : priority === "medium" ? "priority-medium"
@@ -133,6 +134,12 @@ function App() {
                         <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
                             className="form-control" placeholder="Search tasks..." />
                         <button className="btn btn-outline-danger" onClick={clearSearch}>Clear</button>
+                        <button 
+                            className="btn btn-outline-danger"
+                            onClick={clearSearch}
+                        >
+                            Clear
+                        </button>
                     </div>
 
                     <div className="input-group mb-2">
