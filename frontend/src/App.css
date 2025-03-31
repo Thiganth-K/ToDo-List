@@ -35,3 +35,53 @@
   font-weight: 500;
   font-size: 0.75rem;
 }
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker {
+  font-family: inherit;
+  border-radius: 0.375rem;
+  border: 1px solid #dee2e6;
+}
+
+.react-datepicker__header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+/* Diary Section Styling */
+.diary-section {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  border: 1px solid #dee2e6;
+}
+
+.diary-header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.diary-input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.diary-entry {
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.diary-date {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 5px;
+}
